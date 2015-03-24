@@ -6,7 +6,7 @@ class BotPollWorker
 
   def perform(*args)
     Room.active.each do |room|
-      SlackBot.new.update_users(room)
+      SlackBot.new(room).update_users
     end
   end
 end

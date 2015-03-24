@@ -48,7 +48,8 @@ class RoomsController < ApplicationController
     room.active = !room.active
     room.save
 
-    BotPollWorker.perform_async
+    bot = SlackBot.new(room)
+    room.active ? bot.start : bot.stop
 
     redirect_to edit_room_path(room)
   end
