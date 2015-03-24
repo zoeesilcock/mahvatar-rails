@@ -5,7 +5,3 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-
-Room.create title: 'Funnel room'
-Room.create title: 'Library'
-Room.create title: 'Capture room'

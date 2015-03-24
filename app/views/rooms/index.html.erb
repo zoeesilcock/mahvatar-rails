@@ -2,6 +2,12 @@
 
 <ul>
 <% @rooms.each do |room| %>
-    <li><%= link_to room.title, room %></li>
+    <li>
+        <%= link_to room.title, room %>
+        <%= link_to t('.edit'), edit_room_path(room) %>
+        <%= link_to t('.remove'), room_path(room), method: :delete %>
+    </li>
 <% end %>
 </ul>
+
+<%= link_to t('.new'), new_room_path %>
