@@ -42,9 +42,20 @@ class RoomsController < ApplicationController
     redirect_to :rooms
   end
 
+  def start
+    room = Room.find params[:room_id]
+
+    room.active = !room.active
+    room.save
+
+    BotPollWorker.perform_async
+
+    redirect_to edit_room_path(room)
+  end
+
   private
 
   def room_params
-    params.require(:room).permit(:title)
+    params.require(:room).permit(:title, :channel)
   end
 end

@@ -102,4 +102,14 @@ RSpec.describe RoomsController, type: :controller do
       expect(response).to redirect_to :rooms
     end
   end
+
+  describe 'PUT #start' do
+    let!(:room) { create :room }
+
+    it 'redirects back to edit' do
+      put :start, room_id: room
+
+      expect(response).to redirect_to edit_room_path(room)
+    end
+  end
 end

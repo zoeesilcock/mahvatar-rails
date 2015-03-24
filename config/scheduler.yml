@@ -1,0 +1,3 @@
+BotPoll:
+  every: "1h"
+  class: "BotPollWorker"

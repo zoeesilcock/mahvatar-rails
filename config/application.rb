@@ -41,5 +41,7 @@ module Mahvatar
       g.helper false
       g.factory_girl false
     end
+
+    config.autoload_paths += %W(#{config.root}/app/workers)
   end
 end

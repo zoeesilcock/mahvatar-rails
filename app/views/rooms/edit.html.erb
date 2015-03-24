@@ -1,1 +1,3 @@
 <%= render partial: 'form' %>
+
+<%= link_to @room.active ? t('.stop') : t('.start'), room_start_path(@room), method: :put %>
