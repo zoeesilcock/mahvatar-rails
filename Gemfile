@@ -7,6 +7,7 @@ gem 'sidekiq'
 gem 'sidekiq-scheduler', '~> 1'
 gem 'sinatra', :require => nil
 gem 'slack-api'
+gem 'firebase'
 
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'

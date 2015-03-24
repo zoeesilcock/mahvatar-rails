@@ -43,5 +43,6 @@ module Mahvatar
     end
 
     config.autoload_paths += %W(#{config.root}/app/workers)
+    config.autoload_paths += %W(#{config.root}/lib/)
   end
 end
