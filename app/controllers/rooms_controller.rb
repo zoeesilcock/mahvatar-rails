@@ -1,4 +1,6 @@
 class RoomsController < ApplicationController
+  layout 'game', only: :show
+
   def index
     @rooms = Room.all
   end
