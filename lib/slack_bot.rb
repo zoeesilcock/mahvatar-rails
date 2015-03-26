@@ -41,7 +41,7 @@ class SlackBot
   end
 
   def update_users
-    channel_data = Slack.channels_info channel: room.channel_id
+    channel_data = Slack.channels_info channel: @room.channel_id
 
     channel_data['channel']['members'].each do |user_id|
       user_data = Slack.users_info user: user_id

@@ -5,6 +5,9 @@
   <%= stylesheet_link_tag 'game', media: 'all' %>
   <%= javascript_include_tag 'game' %>
   <%= csrf_meta_tags %>
+  <script>
+  var FIREBASE_URL = "<%= ENV['FIREBASE_URL'] %>";
+  </script>
 </head>
 <body>
 
