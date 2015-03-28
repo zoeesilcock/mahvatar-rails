@@ -6,6 +6,5 @@
 //= require_tree ./game/entities
 //= require_tree ./game/screens
 
-window.onReady(function() {
-  game.onload();
-});
+window.onReady ->
+  game.onload()
