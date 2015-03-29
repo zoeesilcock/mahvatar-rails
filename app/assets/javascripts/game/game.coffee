@@ -2,8 +2,9 @@ game =
   data: 0
   score: 0
   firebase: null
+  players: {}
 
-  'onload': ->
+  onload: ->
     # Initialize the video.
     if !me.video.init('screen', me.video.CANVAS, 960, 640, true, 'auto')
       alert 'Your browser does not support HTML5 canvas.'
@@ -26,29 +27,63 @@ game =
     me.state.change me.state.LOADING
 
     @firebase = new Firebase(FIREBASE_URL + '/users')
-    @firebase.once 'value', (nameSnapshot) ->
-      users = nameSnapshot.val()
-      index = 0
-      for user_id of users
-        `user_id = user_id`
-        user = users[user_id]
-        player = new (game.PlayerEntity)(50 + index * 100, 550,
-          name: 'Player'
-          height: 64
-          width: 64
-          spritewidth: 64
-          image: 'spritesheet'
-          userName: user.name)
-        me.game.world.addChild player, 3
-        player.userName = user.name
-        index++
+    @index = 0
 
-  'loaded': ->
+    @firebase.on 'child_added', @userAdded
+    @firebase.on 'child_changed', @userChanged
+    @firebase.on 'child_removed', @userRemoved
+
+  loaded: ->
     me.state.set me.state.PLAY, new (game.PlayScreen)
     me.pool.register 'Player', game.PlayerEntity
 
     # Start the game.
     me.state.change me.state.PLAY
+
+  userAdded: (userSnapshot)->
+    user = userSnapshot.val()
+    user.id = userSnapshot.key()
+
+    if user.status == 'active'
+      game.addPlayer(user)
+
+  userChanged: (userSnapshot)->
+    user = userSnapshot.val()
+    user.id = userSnapshot.key()
+
+    if user.status == 'active'
+      game.addPlayer(user)
+    else
+      game.removePlayer user
+
+  userRemoved: (userSnapshot)->
+    user = userSnapshot.val()
+    user.id = userSnapshot.key()
+
+    game.removePlayer user
+
+  addPlayer: (user)->
+    player = new (game.PlayerEntity)(50 + game.index * 100, 550,
+      name: 'Player'
+      height: 64
+      width: 64
+      spritewidth: 64
+      image: 'spritesheet'
+      userName: user.name)
+
+    me.game.world.addChild player, 3
+    game.players[user.id] = player
+    game.index++
+
+  removePlayer: (user)->
+    player = game.players[user.id]
+
+    if player
+      me.game.world.removeChild player
+      delete game.players[user.id]
+      game.index--
+
+      me.game.repaint.defer()
 
 root = exports ? this
 root.game = game

@@ -16,19 +16,18 @@ game.PlayerEntity = me.Entity.extend
     @userName = settings.userName
 
   draw: (renderer) ->
-    @_super me.Entity, 'draw', [ renderer ]
-
     @context.save()
 
     if @nameLabel
       @nameLabel.draw @context, @userName, @pos.x - me.game.viewport.pos.x + 16, @pos.y - me.game.viewport.pos.y - 20
 
+    @_super me.Entity, 'draw', [ renderer ]
+
   update: (dt) ->
     @body.update dt
     me.collision.check this
 
-    # return true if we moved or if the renderable was updated
-    @_super(me.Entity, 'update', [ dt ]) or @body.vel.x != 0 or @body.vel.y != 0
+    @_super(me.Entity, 'update', [ dt ])
 
   onCollision: (response, other) ->
     true
