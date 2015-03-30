@@ -1,12 +1,12 @@
 game =
-  data: 0
+  data: {}
   score: 0
   firebase: null
   players: {}
 
   onload: ->
     # Initialize the video.
-    if !me.video.init('screen', me.video.CANVAS, 960, 640, true, 'auto')
+    if !me.video.init('screen', me.video.CANVAS, 960, 640, true)
       alert 'Your browser does not support HTML5 canvas.'
       return
 
