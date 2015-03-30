@@ -27,7 +27,6 @@ game =
     me.state.change me.state.LOADING
 
     @firebase = new Firebase(FIREBASE_URL + '/users')
-    @index = 0
 
     @firebase.on 'child_added', @userAdded
     @firebase.on 'child_changed', @userChanged
@@ -63,27 +62,23 @@ game =
     game.removePlayer user
 
   addPlayer: (user)->
-    player = new (game.PlayerEntity)(50 + game.index * 100, 550,
+    player = new (game.PlayerEntity)(-64, 550,
       name: 'Player'
       height: 64
       width: 64
       spritewidth: 64
       image: 'spritesheet'
-      userName: user.name)
+      userName: user.name,
+      userId: user.id)
 
     me.game.world.addChild player, 3
     game.players[user.id] = player
-    game.index++
 
   removePlayer: (user)->
     player = game.players[user.id]
 
     if player
-      me.game.world.removeChild player
-      delete game.players[user.id]
-      game.index--
-
-      me.game.repaint.defer()
+      player.leave()
 
 root = exports ? this
 root.game = game
