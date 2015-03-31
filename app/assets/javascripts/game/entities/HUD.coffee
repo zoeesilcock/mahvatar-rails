@@ -23,16 +23,11 @@ game.HUD.ScoreItem = me.Renderable.extend
     @nameLabel = new (me.Font)('Verdana', 32, 'white')
     @name = game.data.name
 
-    canvas = me.video.renderer.getCanvas()
-    @context = me.CanvasRenderer.getContext2d(canvas)
-
   update: ->
-    # we don't do anything fancy here, so just
-    # return true if the score has been updated
     if @name != game.data.name
       @name = game.data.name
       return true
     false
 
   draw: (renderer) ->
-    @nameLabel.draw @context, @name, @pos.x, @pos.y
+    @nameLabel.draw renderer.getContext(), @name, @pos.x, @pos.y

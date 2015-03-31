@@ -9,9 +9,6 @@ game.PlayerEntity = me.Entity.extend
     size = @body.getBounds().width
     @body.addShape new (me.Rect)(0, 0, size, size)
 
-    canvas = me.video.renderer.getCanvas()
-    @context = me.CanvasRenderer.getContext2d(canvas)
-
     @nameLabel = new (me.Font)('Verdana', 14, 'white')
     @userName = settings.userName
     @userId = settings.userId
@@ -21,10 +18,8 @@ game.PlayerEntity = me.Entity.extend
     @body.vel.x = 2
 
   draw: (renderer) ->
-    @context.save()
-
     if @nameLabel
-      @nameLabel.draw @context, @userName, @pos.x - me.game.viewport.pos.x + 16, @pos.y - me.game.viewport.pos.y - 20
+      @nameLabel.draw renderer.getContext(), @userName, @pos.x - me.game.viewport.pos.x + 16, @pos.y - me.game.viewport.pos.y - 20
 
     @_super me.Entity, 'draw', [ renderer ]
 
