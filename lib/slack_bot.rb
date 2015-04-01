@@ -18,8 +18,23 @@ class SlackBot
 
     find_channel_id
 
-    Slack.users_setPresence presence: 'auto'
-    Slack.chat_postMessage channel: @room.channel_id, text: "Hello world!"
+    # Slack.users_setPresence presence: 'auto'
+    # Slack.chat_postMessage channel: @room.channel_id, text: "Hello world!"
+
+    Rails.logger.info 'perform async'
+    BotRealtimeWorker.perform_async @room.id
+  end
+
+  def start_realtime
+    Sidekiq::Logging.logger.info('starting realtime')
+
+    @realtime_client = Slack.realtime
+    @realtime_client.on :message, &method(:receive_message)
+    @realtime_client.on :hello do |data|
+      Sidekiq::Logging.logger.info('Realtime connected')
+    end
+
+    @realtime_client.start
   end
 
   def stop
@@ -49,5 +64,9 @@ class SlackBot
 
       result = firebase.set "users/#{user_id}", { name: user_data['user']['name'], status: presence_data['presence'] }
     end
+  end
+
+  def receive_message(data)
+    Sidekiq::Logging.logger.info data['text']
   end
 end
