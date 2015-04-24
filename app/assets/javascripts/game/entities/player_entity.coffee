@@ -13,22 +13,21 @@ game.PlayerEntity = me.Entity.extend
     @userName = settings.userName
     @userId = settings.userId
 
-    @state = 'joining'
-    @stateDuration = Number.prototype.random(1500, 3000)
-    @body.vel.x = 2
+    @state = 'will_join'
+    @stateDuration = settings.waitTime
+    console.log @stateDuration
 
   draw: (renderer) ->
     if @nameLabel
-      @nameLabel.draw renderer, @userName, @pos.x - me.game.viewport.pos.x + 16, @pos.y - me.game.viewport.pos.y - 20
+      @nameLabel.draw renderer, @userName, @pos.x - me.game.viewport.pos.x + 16, @pos.y - me.game.viewport.pos.y + 64
 
     @_super me.Entity, 'draw', [ renderer ]
 
   update: (dt) ->
     @stateDuration -= dt
 
-    if (@state != 'joining' && @state != 'leaving') && (@pos.x < 0 || @pos.x > 900)
-      # Don't leave the edge of the area.
-      @body.vel.x = -@body.vel.x
+    if @state == 'will_join' && @stateDuration <= 0
+      @join()
 
     if @state == 'joining' && @stateDuration <= 0
       @idle()
@@ -39,6 +38,10 @@ game.PlayerEntity = me.Entity.extend
     if @state == 'walking' && @stateDuration <= 0
       @idle()
 
+    if (@state != 'joining' && @state != 'leaving') && (@pos.x < 0 || @pos.x > 900)
+      # Don't leave the edge of the area.
+      @body.vel.x = -@body.vel.x
+
     if @state == 'leaving' && @pos.x < -50
       me.game.world.removeChild @
       delete game.players[@userId]
@@ -47,6 +50,12 @@ game.PlayerEntity = me.Entity.extend
     me.collision.check @
     @_super(me.Entity, 'update', [ dt ])
     true
+
+  join: ->
+    @state = 'joining'
+    @stateDuration = Number.prototype.random(2500, 5000)
+    @body.vel.x = 2
+    console.log "#{@userName} joins for: #{@stateDuration}"
 
   idle: ->
     @state = 'idle'
@@ -65,4 +74,4 @@ game.PlayerEntity = me.Entity.extend
     @state = 'leaving'
 
   onCollision: (response, other) ->
-    if other.name == 'player' then false else true
+    if other.name == 'Player' then false else true

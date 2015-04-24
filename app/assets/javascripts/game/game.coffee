@@ -26,6 +26,8 @@ game =
     # Initialize melonJS and display a loading screen.
     me.state.change me.state.LOADING
 
+    @lastJoin = 0
+
   loaded: ->
     me.state.set me.state.PLAY, new (game.PlayScreen)
     me.pool.register 'Player', game.PlayerEntity
@@ -61,16 +63,27 @@ game =
 
     game.removePlayer user
 
+  joiningPlayerCount: ->
+    count = 0
+    for id, player of game.players
+      count += 1 if player.state == 'will_join'
+
+    count
+
   addPlayer: (user)->
-    player = new (game.PlayerEntity)(-64, -64,
+    joinTime = 2000 * @joiningPlayerCount()
+    player = new (game.PlayerEntity)(-128, -64,
       name: 'Player'
       height: 64
       width: 64
       spritewidth: 64
       image: 'spritesheet'
-      userName: user.name,
-      userId: user.id)
+      userName: user.name
+      userId: user.id
+      waitTime: if (Date.now() - @lastJoin) < joinTime then joinTime else 0
+    )
 
+    @lastJoin = Date.now()
     me.game.world.addChild player, 3
     game.players[user.id] = player
 
