@@ -1,5 +1,6 @@
 class RoomsController < ApplicationController
   layout 'game', only: :show
+  before_filter :allow_iframe_requests, only: :show
 
   def index
     @rooms = Room.all
@@ -60,5 +61,9 @@ class RoomsController < ApplicationController
 
   def room_params
     params.require(:room).permit(:title, :channel)
+  end
+
+  def allow_iframe_requests
+    response.headers.delete('X-Frame-Options')
   end
 end

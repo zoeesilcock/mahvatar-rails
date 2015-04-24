@@ -62,7 +62,7 @@ game =
     game.removePlayer user
 
   addPlayer: (user)->
-    player = new (game.PlayerEntity)(-64, 550,
+    player = new (game.PlayerEntity)(-64, -64,
       name: 'Player'
       height: 64
       width: 64
