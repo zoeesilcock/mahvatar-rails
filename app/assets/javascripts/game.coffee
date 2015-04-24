@@ -1,4 +1,4 @@
-//= require melonJS-2.0.2
+//= require melonJS-2.1.0
 //= require debug/debugPanel
 //= require firebase
 //= require ./game/game

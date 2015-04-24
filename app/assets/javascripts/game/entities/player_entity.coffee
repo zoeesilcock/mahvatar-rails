@@ -19,7 +19,7 @@ game.PlayerEntity = me.Entity.extend
 
   draw: (renderer) ->
     if @nameLabel
-      @nameLabel.draw renderer.getContext(), @userName, @pos.x - me.game.viewport.pos.x + 16, @pos.y - me.game.viewport.pos.y - 20
+      @nameLabel.draw renderer, @userName, @pos.x - me.game.viewport.pos.x + 16, @pos.y - me.game.viewport.pos.y - 20
 
     @_super me.Entity, 'draw', [ renderer ]
 

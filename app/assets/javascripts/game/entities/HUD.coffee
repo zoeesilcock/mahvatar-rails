@@ -30,4 +30,4 @@ game.HUD.ScoreItem = me.Renderable.extend
     false
 
   draw: (renderer) ->
-    @nameLabel.draw renderer.getContext(), @name, @pos.x, @pos.y
+    @nameLabel.draw renderer, @name, @pos.x, @pos.y
