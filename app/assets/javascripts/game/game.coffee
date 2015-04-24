@@ -26,18 +26,18 @@ game =
     # Initialize melonJS and display a loading screen.
     me.state.change me.state.LOADING
 
-    @firebase = new Firebase(FIREBASE_URL + '/users')
-
-    @firebase.on 'child_added', @userAdded
-    @firebase.on 'child_changed', @userChanged
-    @firebase.on 'child_removed', @userRemoved
-
   loaded: ->
     me.state.set me.state.PLAY, new (game.PlayScreen)
     me.pool.register 'Player', game.PlayerEntity
 
     # Start the game.
     me.state.change me.state.PLAY
+
+    @firebase = new Firebase(FIREBASE_URL + '/users')
+
+    @firebase.on 'child_added', @userAdded
+    @firebase.on 'child_changed', @userChanged
+    @firebase.on 'child_removed', @userRemoved
 
   userAdded: (userSnapshot)->
     user = userSnapshot.val()
