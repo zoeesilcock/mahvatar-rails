@@ -22,4 +22,5 @@ group :development, :test do
   gem 'guard-rspec', require: false
   gem 'quiet_assets'
   gem 'dotenv-rails'
+  gem 'teaspoon'
 end
