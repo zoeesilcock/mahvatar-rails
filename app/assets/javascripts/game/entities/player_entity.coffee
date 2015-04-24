@@ -15,7 +15,6 @@ game.PlayerEntity = me.Entity.extend
 
     @state = 'will_join'
     @stateDuration = settings.waitTime
-    console.log @stateDuration
 
   draw: (renderer) ->
     if @nameLabel
@@ -38,7 +37,7 @@ game.PlayerEntity = me.Entity.extend
     if @state == 'walking' && @stateDuration <= 0
       @idle()
 
-    if (@state != 'joining' && @state != 'leaving') && (@pos.x < 0 || @pos.x > 900)
+    if (@state != 'joining' && @state != 'leaving') && (@pos.x < 0 || @pos.x > (me.game.viewport.width - @body.getBounds().width))
       # Don't leave the edge of the area.
       @body.vel.x = -@body.vel.x
 
@@ -53,21 +52,18 @@ game.PlayerEntity = me.Entity.extend
 
   join: ->
     @state = 'joining'
-    @stateDuration = Number.prototype.random(2500, 5000)
+    @stateDuration = Number.prototype.random(3000, 5000)
     @body.vel.x = 2
-    console.log "#{@userName} joins for: #{@stateDuration}"
 
   idle: ->
     @state = 'idle'
     @stateDuration = Number.prototype.random(2000, 8000)
     @body.vel.x = 0
-    console.log "#{@userName} waits for: #{@stateDuration}"
 
   walk: ->
     @state = 'walking'
     @body.vel.x = Number.prototype.random(-20, 20) / 10
     @stateDuration = Number.prototype.random(3000, 6000)
-    console.log "#{@userName} starts walking"
 
   leave: ->
     @body.vel.x = -3
