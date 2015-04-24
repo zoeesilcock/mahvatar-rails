@@ -51,18 +51,18 @@ describe 'PlayerEntity', ->
 
     context 'when not joining or leaving', ->
       it 'turns around when it reaches the left edge of the screen', ->
-        @player.body.vel.x = -3
+        @player.velocity = -3
         @player.pos.x = -1
         @player.state = 'walking'
         @player.update(1)
-        expect(@player.body.vel.x).to.equal(3)
+        expect(@player.velocity).to.equal(3)
 
       it 'turns around when it reaches the right edge of the screen', ->
-        @player.body.vel.x = 3
+        @player.velocity = 3
         @player.pos.x = 1920
         @player.state = 'walking'
         @player.update(1)
-        expect(@player.body.vel.x).to.equal(-3)
+        expect(@player.velocity).to.equal(-3)
 
   describe '#join()', ->
     before ->
@@ -72,7 +72,7 @@ describe 'PlayerEntity', ->
       expect(@player.state).to.equal('joining')
 
     it 'sets the player x velocity to a positive number', ->
-      expect(@player.body.vel.x).to.be.above(0)
+      expect(@player.velocity).to.be.above(0)
 
   describe '#idle()', ->
     before ->
@@ -82,18 +82,18 @@ describe 'PlayerEntity', ->
       expect(@player.state).to.equal('idle')
 
     it 'sets the player x velocity to zero', ->
-      expect(@player.body.vel.x).to.equal(0)
+      expect(@player.velocity).to.equal(0)
 
   describe '#walk()', ->
     before ->
-      @previousVelocity = @player.body.vel.x
+      @previousVelocity = @player.velocity
       @player.walk()
 
     it 'sets the state to walking', ->
       expect(@player.state).to.equal('walking')
 
     it 'changes the player x velocity', ->
-      expect(@player.body.vel.x).to.not.equal(@previousVelocity)
+      expect(@player.velocity).to.not.equal(@previousVelocity)
 
   describe '#leave()', ->
     before ->
@@ -103,4 +103,4 @@ describe 'PlayerEntity', ->
       expect(@player.state).to.equal('leaving')
 
     it 'sets the player x velocity to a negative number', ->
-      expect(@player.body.vel.x).to.be.below(0)
+      expect(@player.velocity).to.be.below(0)

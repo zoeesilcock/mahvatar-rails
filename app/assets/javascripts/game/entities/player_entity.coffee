@@ -15,6 +15,7 @@ game.PlayerEntity = me.Entity.extend
 
     @state = 'will_join'
     @stateDuration = settings.waitTime
+    @velocity = 0
 
   draw: (renderer) ->
     if @nameLabel
@@ -37,36 +38,44 @@ game.PlayerEntity = me.Entity.extend
     if @state == 'walking' && @stateDuration <= 0
       @idle()
 
-    if (@state != 'joining' && @state != 'leaving') && (@pos.x < 0 || @pos.x > (me.game.viewport.width - @body.getBounds().width))
+    if (@leavingLeftSide() || @leavingRightSide()) && (@state != 'joining' && @state != 'leaving')
       # Don't leave the edge of the area.
-      @body.vel.x = -@body.vel.x
+      @velocity = -@velocity
 
-    if @state == 'leaving' && @pos.x < -50
+    if @state == 'leaving' && @pos.x < -128
       me.game.world.removeChild @
       delete game.players[@userId]
+
+    @body.vel.x = (@velocity * dt) / 10
 
     @body.update dt
     me.collision.check @
     @_super(me.Entity, 'update', [ dt ])
     true
 
+  leavingLeftSide: ->
+    @pos.x < 0 && @velocity < 0
+
+  leavingRightSide: ->
+    @pos.x > (me.game.viewport.width - @body.getBounds().width) && @velocity > 0
+
   join: ->
     @state = 'joining'
-    @stateDuration = Number.prototype.random(3000, 5000)
-    @body.vel.x = 2
+    @stateDuration = Number.prototype.random(1000, 2000)
+    @velocity = 2
 
   idle: ->
     @state = 'idle'
     @stateDuration = Number.prototype.random(2000, 8000)
-    @body.vel.x = 0
+    @velocity = 0
 
   walk: ->
     @state = 'walking'
-    @body.vel.x = Number.prototype.random(-20, 20) / 10
+    @velocity = Number.prototype.random(-15, 15) / 10
     @stateDuration = Number.prototype.random(3000, 6000)
 
   leave: ->
-    @body.vel.x = -3
+    @velocity = -3
     @state = 'leaving'
 
   onCollision: (response, other) ->
