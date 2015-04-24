@@ -76,7 +76,6 @@ game =
       name: 'Player'
       height: 64
       width: 64
-      spritewidth: 64
       image: 'spritesheet'
       userName: user.name
       userId: user.id
