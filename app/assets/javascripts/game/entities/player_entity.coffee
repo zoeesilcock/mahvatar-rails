@@ -2,6 +2,13 @@ game.PlayerEntity = me.Entity.extend
   init: (x, y, settings) ->
     @_super me.Entity, 'init', [ x, y, settings ]
 
+    @userName = settings.userName
+    @userId = settings.userId
+    @stateDuration = settings.waitTime
+
+    @state = 'will_join'
+    @velocity = 0
+
     @alwaysUpdate = true
     @renderable.addAnimation 'stand', [ 1 ]
     @renderable.setCurrentAnimation 'stand'
@@ -9,19 +16,8 @@ game.PlayerEntity = me.Entity.extend
     size = @body.getBounds().width
     @body.addShape new (me.Rect)(0, 0, size, size)
 
-    @nameLabel = new (me.Font)('Verdana', 14, 'white')
-    @userName = settings.userName
-    @userId = settings.userId
-
-    @state = 'will_join'
-    @stateDuration = settings.waitTime
-    @velocity = 0
-
-  draw: (renderer) ->
-    if @nameLabel
-      @nameLabel.draw renderer, @userName, @pos.x - me.game.viewport.pos.x + 16, @pos.y - me.game.viewport.pos.y + 64
-
-    @_super me.Entity, 'draw', [ renderer ]
+    @nameContainer = new (game.PlayerName.Container)(@)
+    me.game.world.addChild @nameContainer, 5
 
   update: (dt) ->
     @stateDuration -= dt
