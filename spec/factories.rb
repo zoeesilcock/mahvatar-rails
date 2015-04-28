@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :room do
-    title 'Funnel room'
+    title 'Mahvatar Testing'
+    channel 'mahvatar'
   end
 end

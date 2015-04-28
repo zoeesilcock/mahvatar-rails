@@ -107,6 +107,8 @@ RSpec.describe RoomsController, type: :controller do
     let!(:room) { create :room }
 
     it 'redirects back to edit' do
+      expect_any_instance_of(SlackBot).to receive(:start)
+
       put :start, room_id: room
 
       expect(response).to redirect_to edit_room_path(room)
