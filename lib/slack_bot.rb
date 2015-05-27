@@ -19,7 +19,7 @@ class SlackBot
     find_channel_id
 
     Slack.users_setPresence presence: 'auto'
-    Slack.chat_postMessage channel: @room.channel_id, text: "Hello world!"
+    # Slack.chat_postMessage channel: @room.channel_id, text: "At your service."
   end
 
   def stop
@@ -47,7 +47,23 @@ class SlackBot
       user_data = Slack.users_info user: user_id
       presence_data = Slack.users_getPresence user: user_id
 
-      result = firebase.set "users/#{user_id}", { name: user_data['user']['name'], status: presence_data['presence'] }
+      user = create_or_find_user(user_data)
+      result = firebase.set "users/#{user_id}", {
+        name: user_data['user']['name'],
+        status: presence_data['presence'],
+        head: user.head
+      }
     end
+  end
+
+  def create_or_find_user(user_data)
+    user = User.find_by_identifier(user_data['user']['id'])
+
+    unless user
+      user = User.create(identifier: user_data['user']['id'], name: user_data['user']['name'])
+      user.save
+    end
+
+    user
   end
 end

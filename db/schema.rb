@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150324153832) do
+ActiveRecord::Schema.define(version: 20150428065213) do
 
   create_table "rooms", force: :cascade do |t|
     t.string   "title"
@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(version: 20150324153832) do
     t.string   "channel"
     t.boolean  "active"
     t.string   "channel_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "identifier"
+    t.string   "name"
+    t.string   "head"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
