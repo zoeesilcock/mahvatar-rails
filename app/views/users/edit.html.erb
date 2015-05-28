@@ -1,0 +1,7 @@
+<%= simple_form_for @user do |f| %>
+    <input name="auth_token" type="hidden" value="<%= params[:auth_token] %>" />
+
+    <%= f.input :name %>
+    <%= f.input :head %>
+    <%= f.button :submit %>
+<% end %>
