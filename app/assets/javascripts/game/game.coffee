@@ -79,6 +79,7 @@ game =
       image: 'spritesheet'
       userName: user.name
       userId: user.id
+      headPath: user.head
       waitTime: if (Date.now() - @lastJoin) < joinTime then joinTime else 0
     )
 

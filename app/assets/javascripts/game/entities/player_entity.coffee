@@ -5,6 +5,7 @@ game.PlayerEntity = me.Entity.extend
     @userName = settings.userName
     @userId = settings.userId
     @stateDuration = settings.waitTime
+    @headPath = settings.headPath
 
     @state = 'will_join'
     @velocity = 0
@@ -19,7 +20,24 @@ game.PlayerEntity = me.Entity.extend
     @nameContainer = new (game.PlayerName.Container)(@)
     me.game.world.addChild @nameContainer, 5
 
-    @headEntity = new (game.HeadEntity)(x, y, playerEntity: @)
+    if @headPath? && @headPath.length
+      @loadHeadResource()
+    else
+      @createHeadEntity 'default_head'
+
+  loadHeadResource: ->
+    imageName = "custom_head_#{@userId}"
+
+    me.loader.load({
+      name: imageName
+      type: 'image'
+      src: @headPath
+    }, =>
+      @createHeadEntity imageName
+    )
+
+  createHeadEntity: (imageName) ->
+    @headEntity = new (game.HeadEntity)(@x, @y, playerEntity: @, image: imageName)
     me.game.world.addChild @headEntity, 5
 
   update: (dt) ->
