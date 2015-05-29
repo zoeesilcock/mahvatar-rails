@@ -2,9 +2,17 @@
     <input name="auth_token" type="hidden" value="<%= params[:auth_token] %>" />
 
     <%= f.input :name %>
-    <%= f.input :head %>
-    <%= image_tag @user.head.url %>
-    <br />
 
-    <%= f.button :submit %>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6">
+                <%= f.input :head %>
+            </div>
+            <div class="col-xs-6">
+                <%= image_tag @user.head.url, class: 'head pull-right' %>
+            </div>
+        </div>
+    </div>
+
+    <%= f.button :submit, class: 'pull-right btn-primary' %>
 <% end %>
