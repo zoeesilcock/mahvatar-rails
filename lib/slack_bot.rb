@@ -51,7 +51,7 @@ class SlackBot
       result = firebase.set "users/#{user_id}", {
         name: user_data['user']['name'],
         status: presence_data['presence'],
-        head: user.head
+        head: user.head.url == 'default_head.png' ? '' : user.head.url
       }
     end
   end
