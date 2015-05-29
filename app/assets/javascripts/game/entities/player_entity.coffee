@@ -19,6 +19,9 @@ game.PlayerEntity = me.Entity.extend
     @nameContainer = new (game.PlayerName.Container)(@)
     me.game.world.addChild @nameContainer, 5
 
+    @headEntity = new (game.HeadEntity)(x, y, playerEntity: @)
+    me.game.world.addChild @headEntity, 5
+
   update: (dt) ->
     @stateDuration -= dt
 
