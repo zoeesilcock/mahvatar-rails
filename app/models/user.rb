@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  mount_uploader :head, HeadUploader
+
   def generate_token
     self.auth_token = SecureRandom.urlsafe_base64
     self.auth_token_at = DateTime.now

@@ -3,5 +3,8 @@
 
     <%= f.input :name %>
     <%= f.input :head %>
+    <%= image_tag @user.head.url %>
+    <br />
+
     <%= f.button :submit %>
 <% end %>
