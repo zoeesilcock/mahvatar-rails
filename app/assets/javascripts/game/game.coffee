@@ -53,7 +53,10 @@ game =
     user.id = userSnapshot.key()
 
     if user.status == 'active'
-      game.addPlayer(user)
+      if game.players[user.id]
+        game.players[user.id].setUserDetails(user)
+      else
+        game.addPlayer(user)
     else
       game.removePlayer user
 
@@ -77,9 +80,7 @@ game =
       height: 64
       width: 64
       image: 'spritesheet'
-      userName: user.name
-      userId: user.id
-      headPath: user.head
+      userDetails: user
       waitTime: if (Date.now() - @lastJoin) < joinTime then joinTime else 0
     )
 

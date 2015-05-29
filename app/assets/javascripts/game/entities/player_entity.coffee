@@ -2,10 +2,8 @@ game.PlayerEntity = me.Entity.extend
   init: (x, y, settings) ->
     @_super me.Entity, 'init', [ x, y, settings ]
 
-    @userName = settings.userName
-    @userId = settings.userId
     @stateDuration = settings.waitTime
-    @headPath = settings.headPath
+    @setUserDetails settings.userDetails
 
     @state = 'will_join'
     @velocity = 0
@@ -20,10 +18,18 @@ game.PlayerEntity = me.Entity.extend
     @nameContainer = new (game.PlayerName.Container)(@)
     me.game.world.addChild @nameContainer, 5
 
-    if @headPath? && @headPath.length
-      @loadHeadResource()
-    else
-      @createHeadEntity 'default_head'
+  setUserDetails: (details) ->
+    oldHead = @headPath
+
+    @userId = details.id
+    @userName = details.name
+    @headPath = details.head
+
+    if oldHead != @headPath
+      if @headPath? && @headPath.length
+        @loadHeadResource()
+      else
+        @createHeadEntity 'default_head'
 
   loadHeadResource: ->
     imageName = "custom_head_#{@userId}"
@@ -37,6 +43,9 @@ game.PlayerEntity = me.Entity.extend
     )
 
   createHeadEntity: (imageName) ->
+    if @headEntity
+      me.game.world.removeChild @headEntity
+
     @headEntity = new (game.HeadEntity)(@x, @y, playerEntity: @, image: imageName)
     me.game.world.addChild @headEntity, 5
 
