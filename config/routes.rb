@@ -1,9 +1,11 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
+  get 'home/index'
+
   resources :users, only: [:edit, :update]
 
-  root 'rooms#index'
+  root 'home#index'
   mount Sidekiq::Web => '/sidekiq'
 
   resources :rooms do
