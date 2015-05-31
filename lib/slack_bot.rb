@@ -1,6 +1,8 @@
 require 'slack'
 
 class SlackBot
+  include Rails.application.routes.url_helpers
+
   def initialize(room)
     @room = room
 
@@ -19,7 +21,15 @@ class SlackBot
     find_channel_id
 
     Slack.users_setPresence presence: 'auto'
-    # Slack.chat_postMessage channel: @room.channel_id, text: "At your service."
+    # Slack.chat_postMessage channel: @room.channel_id, text: 'You rang my lord?'
+
+    BotRealtimeWorker.perform_async @room.id
+  end
+
+  def start_realtime
+    @realtime_client = Slack.realtime
+    @realtime_client.on :message, &method(:receive_message)
+    @realtime_client.start
   end
 
   def stop
@@ -65,5 +75,16 @@ class SlackBot
     end
 
     user
+  end
+
+  def receive_message(data)
+    if data['text'] == '!profile'
+      user = User.find_by_identifier data['user']
+      user.generate_token
+      profile_link = edit_user_url user, auth_token: user.auth_token
+
+      response = Slack.im_open user: data['user']
+      Slack.chat_postMessage channel: response['channel']['id'], text: "Edit profile: #{profile_link}"
+    end
   end
 end
