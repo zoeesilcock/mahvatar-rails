@@ -4,16 +4,44 @@ RSpec.describe User, type: :model do
   let(:user) { build :user}
 
   describe 'generate_token' do
-    before do
-      user.generate_token
+
+    context 'user has no token' do
+      it 'populates the auth_token field with a random value' do
+        expect{user.generate_token}.to change{user.auth_token}
+      end
+
+      it 'sets the auth_token_at field to the current date' do
+        expect{user.generate_token}.to change{user.auth_token_at}
+      end
     end
 
-    it 'populates the auth_token field with a random value' do
-      expect(user.auth_token).to_not be_nil
+    context 'user has a valid token' do
+      before do
+        user.generate_token
+      end
+
+      it 'populates the auth_token field with a random value' do
+        expect{user.generate_token}.to_not change{user.auth_token}
+      end
+
+      it 'sets the auth_token_at field to the current date' do
+        expect{user.generate_token}.to_not change{user.auth_token_at}
+      end
     end
 
-    it 'sets the auth_token_at field to the current date' do
-      expect(user.auth_token_at).to_not be_nil
+    context 'user has an expired token' do
+      before do
+        user.generate_token
+        user.auth_token_at = 6.days.ago
+      end
+
+      it 'populates the auth_token field with a random value' do
+        expect{user.generate_token}.to change{user.auth_token}
+      end
+
+      it 'sets the auth_token_at field to the current date' do
+        expect{user.generate_token}.to change{user.auth_token_at}
+      end
     end
   end
 
