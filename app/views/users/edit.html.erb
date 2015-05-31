@@ -3,14 +3,12 @@
 
     <%= f.input :name %>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-6">
-                <%= f.input :head %>
-            </div>
-            <div class="col-xs-6">
-                <%= image_tag @user.head.url, class: 'head pull-right' %>
-            </div>
+    <div class="row">
+        <div class="col-xs-6">
+            <%= f.input :head %>
+        </div>
+        <div class="col-xs-6">
+            <%= image_tag @user.head.url, class: 'head pull-right' %>
         </div>
     </div>
 

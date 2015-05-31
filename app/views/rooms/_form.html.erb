@@ -1,5 +1,7 @@
 <%= simple_form_for @room do |f| %>
     <%= f.input :title %>
     <%= f.input :channel %>
-    <%= f.button :submit %>
+
+    <%= f.button :submit, class: 'btn btn-primary pull-right' %>
+    <%= yield %>
 <% end %>
