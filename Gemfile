@@ -13,6 +13,8 @@ gem 'firebase'
 gem 'carrierwave'
 gem 'mini_magick'
 gem 'mina'
+gem 'puma'
+gem 'mina-puma', require: false
 
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
