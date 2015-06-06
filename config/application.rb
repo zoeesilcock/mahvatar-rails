@@ -44,5 +44,12 @@ module Mahvatar
 
     config.autoload_paths += %W(#{config.root}/app/workers)
     config.autoload_paths += %W(#{config.root}/lib/)
+
+    config.middleware.insert_before 0, 'Rack::Cors' do
+      allow do
+        origins '*'
+        resource '*.tmx', :headers => :any, :methods => [:get]
+      end
+    end
   end
 end
