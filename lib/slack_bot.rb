@@ -58,7 +58,7 @@ class SlackBot
       presence_data = Slack.users_getPresence user: user_id
 
       user = create_or_find_user(user_data)
-      result = firebase.set "users/#{user_id}", {
+      firebase.update "users/#{user_id}", {
         name: user.name,
         status: presence_data['presence'],
         head: user.head.url == 'default_head.png' ? '' : user.head.url
