@@ -7,15 +7,21 @@ game.PlayerMessage.Container = me.Container.extend
     @player = playerEntity
     @timeout = null
 
+    @messages = []
+    @keys = []
+
     @messageLabel = new (game.PlayerMessage.Label)(0, -50)
     @messageBackground = new (game.PlayerMessage.Background)(@pos.x, @pos.y, 0, 0)
 
-  draw: (renderer) ->
-    if !@currentMessage && @player.messages && @player.messages.length > 0
-      @currentMessage = @player.messages.shift()
+    @firebase = new Firebase("#{FIREBASE_URL}/users/#{@player.userId}/messages")
+    @firebase.on 'child_added',(messageSnapshot) =>
+      @messages.push messageSnapshot.val()
+      @keys.push messageSnapshot.key()
 
-      firebase = new Firebase("#{FIREBASE_URL}/users/#{@player.userId}/messages")
-      firebase.set(@player.messages)
+  draw: (renderer) ->
+    if !@currentMessage && @messages && @messages.length > 0
+      @currentMessage = @messages.shift()
+      @currentMessageKey = @keys.shift()
 
     if @currentMessage && @currentMessage.length > 0
       labelSize = @messageLabel.label.measureText renderer, @currentMessage
@@ -30,6 +36,7 @@ game.PlayerMessage.Container = me.Container.extend
 
       unless @timeout
         @timeout = window.setTimeout ( =>
+          @firebase.child(@currentMessageKey).set(null)
           @currentMessage = null
           @timeout = null
         ), 5000

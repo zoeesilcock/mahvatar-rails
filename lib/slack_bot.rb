@@ -12,7 +12,7 @@ class SlackBot
   end
 
   def firebase
-    firebase = Firebase::Client.new(ENV['FIREBASE_URL'])
+    @firebase ||= Firebase::Client.new(ENV['FIREBASE_URL'])
   end
 
   def start
@@ -85,6 +85,11 @@ class SlackBot
 
       response = Slack.im_open user: data['user']
       Slack.chat_postMessage channel: response['channel']['id'], text: "Edit profile: #{profile_link}"
+    end
+
+    if data['text'] =~ /!say\s(.+)/
+      matches = data['text'].match /!say\s(?<message>.+)/
+      firebase.push "users/#{data['user']}/messages", matches['message']
     end
   end
 end
