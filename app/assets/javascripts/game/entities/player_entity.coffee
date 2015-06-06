@@ -18,12 +18,16 @@ game.PlayerEntity = me.Entity.extend
     @nameContainer = new (game.PlayerName.Container)(@)
     me.game.world.addChild @nameContainer, 5
 
+    @messageContainer = new (game.PlayerMessage.Container)(@)
+    me.game.world.addChild @messageContainer, 5
+
   setUserDetails: (details) ->
     oldHead = @headPath
 
     @userId = details.id
     @userName = details.name
     @headPath = details.head
+    @messages = details.messages
 
     if oldHead != @headPath
       if @headPath? && @headPath.length
